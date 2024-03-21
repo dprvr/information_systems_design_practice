@@ -1,0 +1,81 @@
+﻿@model Clients.Models.ClientsViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<button>@Html.ActionLink("Add Client", "AddClient", "Clients", new { area = "" }, new { @class = "navbar-brand" })</button>
+@using (Html.BeginForm("Index", "Clients", FormMethod.Post))
+{
+    <br />
+    <p>
+        @Html.TextBoxFor(model => model.SearchString, "") <br />
+    </p>
+
+    <div>
+        @Html.Label("Group by City : ")
+        <label>on @Html.RadioButtonFor(model => model.IsChecked, true)</label>
+        <label>off @Html.RadioButtonFor(model => model.IsChecked, false)</label>
+    </div>
+
+    <input type="submit" value="Search" />
+}
+
+<br>
+
+@if (!Model.IsChecked)
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>LastName</th>
+                <th>FirstName</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var client in Model.IE_Clients)
+            {
+                <tr>
+                    <td>@client.LastName</td>
+                    <td>@client.FirstName</td>
+                    <td>@client.Phone </td>
+                    <td>@Html.ActionLink("Details", "DetailsClient", new { ID = client.ID })</td>
+                    <td>@Html.ActionLink("Edit", "EditClient", new { ID = client.ID })</td>
+                    <td>@Html.ActionLink("Delete", "DeleteClient", new { ID = client.ID })</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    foreach (var group in Model.IG_Clients)
+    {
+        <h3>@group.Key:</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>LastName</th>
+                    <th>FirstName</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var client in group)
+                {
+                    <tr>
+                        <td>@client.LastName</td>
+                        <td>@client.FirstName</td>
+                        <td>@client.Phone </td>
+                        <td>@Html.ActionLink("Details", "DetailsClient", new { ID = client.ID })</td>
+                        <td>@Html.ActionLink("Edit", "EditClient", new { ID = client.ID })</td>
+                        <td>@Html.ActionLink("Delete", "DeleteClient", new { ID = client.ID })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+}
